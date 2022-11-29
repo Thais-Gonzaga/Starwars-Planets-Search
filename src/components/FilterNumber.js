@@ -10,6 +10,8 @@ function FilterNumber() {
     setFilterNumber, filterNumber } } = useContext(StarWarsContext);
 
   const { column, value, comparison } = selectColunm;
+  const filterOpt = options1
+    .filter((e) => !filterNumber.some(({ column: c }) => c === e));
 
   return (
     <div>
@@ -24,7 +26,7 @@ function FilterNumber() {
               ({ ...current, column: target.value })))
           }
         >
-          {options1.map((option) => <option key={ option }>{option}</option>)}
+          {filterOpt.map((option) => <option key={ option }>{option}</option>)}
         </select>
       </label>
 
