@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import StarWarsContext from '../context/StarWarsContext';
 
 function Table() {
-  const { responseApi: { results }, values:
+  const { responseApi: { results }, contex:
     { filterName, filterNumber } } = useContext(StarWarsContext);
   if (!results) return;
   const titles = results.map((data) => Object.keys(data))[0]

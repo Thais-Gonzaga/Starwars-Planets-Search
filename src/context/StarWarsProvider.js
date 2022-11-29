@@ -11,6 +11,7 @@ function StarWarsProvider({ children }) {
     column: 'population',
     comparison: 'maior que',
     value: 0,
+    index: 0,
   });
   const [filterNumber, setFilterNumber] = useState([]);
 
@@ -24,7 +25,7 @@ function StarWarsProvider({ children }) {
     fetchApi();
   }, []);
 
-  const values = useMemo(() => (
+  const contex = useMemo(() => (
     {
       filterName,
       setFilterName,
@@ -37,7 +38,7 @@ function StarWarsProvider({ children }) {
   return (
     <StarWarsContext.Provider
       value={
-        { responseApi, values }
+        { responseApi, contex }
       }
     >
       {children}

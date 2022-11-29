@@ -6,7 +6,7 @@ const options1 = [
 const options2 = ['maior que', 'menor que', 'igual a'];
 
 function FilterNumber() {
-  const { values: { selectColunm, setSelectColunm,
+  const { contex: { selectColunm, setSelectColunm,
     setFilterNumber, filterNumber } } = useContext(StarWarsContext);
 
   const { column, value, comparison } = selectColunm;
@@ -23,7 +23,7 @@ function FilterNumber() {
           data-testid="column-filter"
           onChange={
             ({ target }) => setSelectColunm((current) => (
-              ({ ...current, column: target.value })))
+              ({ ...current, column: target.value, index: filterNumber.length + 1 })))
           }
         >
           {filterOpt.map((option) => <option key={ option }>{option}</option>)}
@@ -67,27 +67,53 @@ function FilterNumber() {
             column: 'population',
             comparison: 'maior que',
             value: 0,
+            index: 0,
           });
         } }
         data-testid="button-filter"
       >
         FILTRAR
       </button>
-      <ul>
+
+      <ol>
         {filterNumber.map((
           { column: col, comparison: comp, value: val },
           index,
         ) => (
-          <div key={ index }>
-            <li>{`${col} ${comp} ${val}`}</li>
+
+          <li
+            key={ index }
+            data-testid="filter"
+            id={ index }
+          >
+            {`${col} ${comp} ${val}`}
+
             <button
               type="button"
+              onClick={ ({ target: { id } }) => {
+                console.log(filterNumber);
+                const num = 0;
+                const newFilter = filterNumber.filter((e) => (
+                  +e.index === num ? +e.index !== num : +e.index !== +id + 1));
+                setFilterNumber(newFilter);
+              } }
+              id={ index }
             >
-              Excluir
+              X
             </button>
-          </div>
+          </li>
+
         ))}
-      </ul>
+      </ol>
+      <button
+        type="button"
+        data-testid="button-remove-filters"
+        onClick={ () => {
+          setFilterNumber([]);
+        } }
+      >
+        Remover todas filtragens
+      </button>
     </div>
   );
 }

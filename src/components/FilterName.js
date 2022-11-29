@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import StarWarsContext from '../context/StarWarsContext';
 
 function FilterName() {
-  const { values: { filterName, setFilterName } } = useContext(StarWarsContext);
+  const { contex: { filterName, setFilterName } } = useContext(StarWarsContext);
 
   return (
     <div>
