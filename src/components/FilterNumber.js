@@ -91,7 +91,6 @@ function FilterNumber() {
             <button
               type="button"
               onClick={ ({ target: { id } }) => {
-                console.log(filterNumber);
                 const num = 0;
                 const newFilter = filterNumber.filter((e) => (
                   +e.index === num ? +e.index !== num : +e.index !== +id + 1));

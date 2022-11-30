@@ -16,10 +16,8 @@ function StarWarsProvider({ children }) {
   const [filterNumber, setFilterNumber] = useState([]);
 
   useEffect(() => {
-    console.log('useEff 1');
     const fetchApi = async () => {
       const { results } = await fetchPlanets();
-      // const { results } = starwarReponse;
       setResponseApi({ results });
     };
     fetchApi();
