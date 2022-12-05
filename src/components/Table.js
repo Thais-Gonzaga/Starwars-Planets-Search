@@ -43,7 +43,10 @@ function Table() {
           .map((data) => (
             <tr key={ data.name }>
               {titles.map((title) => (
-                <td key={ data[title] }>
+                <td
+                  key={ data[title] }
+                  data-testid={ title === 'name' ? 'planet-name' : '' }
+                >
                   {data[title]}
                 </td>
               ))}
