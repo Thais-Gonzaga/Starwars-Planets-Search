@@ -1,10 +1,21 @@
 import React from 'react';
 import { cleanup, getByTestId, render, screen } from '@testing-library/react';
 import App from '../App';
-import mockFetch from '../../cypress/mocks/fetch'
+// import mockFetch from '../../cypress/mocks/fetch'
+import testData from '../../cypress/mocks/testData'
 import StarWarsProvider from '../context/StarWarsProvider';
 import userEvent from '@testing-library/user-event';
+import { act } from 'react-dom/test-utils';
 
+
+const mockFetch = () => {
+  jest.spyOn(global, 'fetch')
+    .mockImplementation(() => Promise.resolve({
+      status: 200,
+      ok: true,
+      json: () => Promise.resolve(testData)
+    }));
+}
 
 const values ={
   inputName: 'oo',
@@ -12,19 +23,44 @@ const values ={
 }
 
 describe('verifica o funcionamento da aplicação', () => {
-  beforeAll(mockFetch);
-  beforeEach(cleanup);
-  test('verifica o funcionamento aplicação', async () => {
+  it('Realize uma requisição para a API', async () => {
+    mockFetch()
+    await act(async () => {
+      render(
+        <StarWarsProvider>
+      <App />
+      </StarWarsProvider>
+      );
+    });
+    expect(global.fetch).toHaveBeenCalled();
+    const columnOrder = screen.getByTestId('column-sort');
+    const sortOrder = screen.getByTestId('column-sort-input-asc');
+    const sortOrderdesc = screen.getByTestId('column-sort-input-desc');
+    const bntOrder = screen.getByTestId('column-sort-button');
     
-      render(<StarWarsProvider>
-        <App />
-        </StarWarsProvider>);
+    expect(columnOrder).toBeInTheDocument();
+    expect(sortOrder).toBeInTheDocument(); 
+    expect(sortOrderdesc).toBeInTheDocument(); 
+    expect(bntOrder).toBeInTheDocument();
+
+    userEvent.selectOptions(columnOrder, 'diameter');
+    userEvent.click(sortOrder)
+    userEvent.click(bntOrder)
+
+    userEvent.selectOptions(columnOrder, 'orbital_period');
+    userEvent.click(sortOrderdesc)
+    userEvent.click(bntOrder)
+    
+    userEvent.selectOptions(columnOrder, 'population');
+    userEvent.click(sortOrderdesc)
+    userEvent.click(bntOrder)
+
     
     const nameFilter = screen.getByTestId('name-filter');
     const valueFilter = screen.getByTestId('value-filter');
     const bntFilter = screen.getByTestId('button-filter');
-    const tatooine = await screen.findByText(/tatooine/i);
-    const naboo = await screen.findByText(/naboo/i);
+    // const tatooine = await screen.findByText(/tatooine/i);
+    // const naboo = await screen.findByText(/naboo/i);
 
     expect(nameFilter).toBeInTheDocument();
     expect(valueFilter).toBeInTheDocument(); 
@@ -32,15 +68,15 @@ describe('verifica o funcionamento da aplicação', () => {
 
     userEvent.type(nameFilter, values.inputName);
 
-    expect(tatooine).toBeInTheDocument();
-    expect(naboo).toBeInTheDocument();
+    // expect(tatooine).toBeInTheDocument();
+    // expect(naboo).toBeInTheDocument();
     
     userEvent.type(valueFilter, values.inputValue);
     userEvent.click(bntFilter);
     
 
-    expect(tatooine).not.toBeInTheDocument();
-    expect(naboo).toBeInTheDocument();
+    // expect(tatooine).not.toBeInTheDocument();
+    // expect(naboo).toBeInTheDocument();
     
     const bntDel = screen.getByText('X');
     const textFilter = screen.getByTestId('filter');
@@ -82,7 +118,7 @@ describe('verifica o funcionamento da aplicação', () => {
     const text1 = screen.getByText('population igual a 0');
     
     expect(text1).toBeInTheDocument();
-    
-
   });
+
+  
 });
